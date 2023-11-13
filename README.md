@@ -14,11 +14,11 @@ The *typically* have 2 roles.
 **Data Analysts** - Work closely with the **business** decision makers in **finance**, **marketing** and other departments. They **query the data** to serve it up using dashboards or different types of reports.
 
 
-***Skill set***: Dashboards, Reporting, Excel, SQL
+>***Skill set***: Dashboards, Reporting, Excel, SQL
 
 **Data Engineers** - In charge of **building** the infrastructure that the data is hosted on usually database and also for managing ETL process.
 
-***Skill set***: ETL, Orchestration, SQL, Python, Java etc
+>***Skill set***: ETL, Orchestration, SQL, Python, Java etc
 
 What is an **ETL process**?
 ETL refers to the process of **Extracting Manipulating/Transforming & Loading** data.
