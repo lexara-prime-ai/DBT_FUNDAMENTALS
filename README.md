@@ -31,3 +31,6 @@ This resulted in **ELT** processes i.e **Extract Load Transform**.
 This means that the Data Team can focus on first **extracting** some data from a **source** and then **loading** it into their warehouse. The data can then be **transformed**.
 
 
+![](https://github.com/projectfinalaudio/DBT_FUNDAMENTALS/blob/main/images/dbt-and-analytics-engineering.png?raw=true)
+
+
