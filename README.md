@@ -33,4 +33,10 @@ This means that the Data Team can focus on first **extracting** some data from a
 
 ![](https://github.com/projectfinalaudio/DBT_FUNDAMENTALS/blob/main/images/dbt-and-analytics-engineering.png?raw=true)
 
+## 2. Modern Data Team
+
+ 1. Data Engineer
+ 2. Analytics Engineer
+ 3. Data Analysts
+
 
