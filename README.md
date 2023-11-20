@@ -86,3 +86,26 @@ dbt
 
 * dbt empowers data teams to leverage software engineering principles for transforming data.
 
+
+## Q/A Section
+**Q.** What technological changes have contributed to the evolution of Extract-Transform-Load (ETL) to Extract-Load-Transform (ELT)?
+
+**A.** 
+- Modern cloud-based data warehouses with scalable storage and compute
+- Off-the-shelf data pipeline/extraction tools (ex: Stitch, Fivetran)
+- Self-service business intelligence tools increased the ability for stakeholders to access and analyze data
+
+**Q.** dbt is part of which step of the Extract-Load-Transform (ELT) process?
+
+**A.**
+- Transform
+
+**Q.** Which one of the following is true about dbt in the context of the modern data stack?
+
+**A.**
+dbt connects directly to your data platform to model data
+
+
+**Q.**Which one of the following is true about YAML files in dbt?
+
+YAML files are used for configuring generic tests
