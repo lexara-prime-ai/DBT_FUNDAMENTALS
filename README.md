@@ -50,10 +50,18 @@ Data Sources -> Loaders -> Data Platforms(*DBT - Manages data transformations, r
 * The data is then consumed using tools such as BI tools, for Machine Learning etc.
 * DBT WORKS directly with the data platform to manage transformations, test them and also document them.
 
-
 ### Usages:
 1. BI Tools
 2. ML Model
 3. Operational Analytics
+
+* DBT makes it easier to develop **transformation pipelines** since it allows the user to write modular code in models as SQL select statements.
+
+* You don't have to worry about the **DDL - Data Design Language** and **DML - Data Manipulation Language**
+
+
+After you're satisfied with your **transformations**, you can deploy your DBT project on a schedule via the **DBT Cloud interface**, setup a job that can run *weekly, daily, hourly* and so on.
+
+Then you'll have refreshed datasets on whatever cadence that you need.
 
 
