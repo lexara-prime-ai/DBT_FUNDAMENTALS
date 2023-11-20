@@ -40,3 +40,20 @@ This means that the Data Team can focus on first **extracting** some data from a
  3. Data Analysts
 
 
+The emergence of **EL(Extract, Load)** tools has made the process of extracting data from various data sources and then load them into your data platform a lot easier.
+
+## Data Flow(The Modern Data Stack):
+
+Data Sources -> Loaders -> Data Platforms(*DBT - Manages data transformations, runs tests*) -> Usages
+
+* Data transfers are handled using loaders(**EL** tools) or custom tooling written in different technologies.
+* The data is then consumed using tools such as BI tools, for Machine Learning etc.
+* DBT WORKS directly with the data platform to manage transformations, test them and also document them.
+
+
+### Usages:
+1. BI Tools
+2. ML Model
+3. Operational Analytics
+
+
