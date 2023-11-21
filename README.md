@@ -248,3 +248,122 @@ Currently, dbt supports four types of materializations: table, view, incremental
 * The table and incremental materializations persist a table, the view materialization creates a view, and the ephemeral materialization returns results directly using a **common table expression** (CTE). 
 
 * If you use dbt, there's little need for **materialized views** since a **materialized view is a table based on a query**, and **you can materialize a dbt model** as a table to get the same result.
+
+**Note** - Optionally set a resource to always or never full-refresh. 1. If specified as true or false, thefull_refresh config will take precedence over the presence or absence of the `--full-refreshflag`. 2. If the full_refresh config is none or omitted, the resource will use the value of the `--full-refreshflag`.
+
+`dbt run full refresh` is a command that treats **incremental** models as **table models**. 
+This means that dbt will **drop** and **recreate** the models **instead of appending new data to them**. 
+
+* This is useful when the **schema or the logic of the incremental models changes** and you need to **reprocess the entire data**. The `--full-refresh` flag affects the `is_incremental()` macro, which will return `false` for **all models when the flag is specified**.
+
+
+## Delete the example models
+
+You can now delete the files that dbt created when you initialized the project:
+
+1.  Delete the  `models/example/`  directory.
+    
+2.  Delete the  `example:`  key from your  `dbt_project.yml`  file, and any configurations that are listed under it.
+    
+    dbt_project.yml
+    
+    ```css
+    # beforemodels:  
+        jaffle_shop:    
+            +materialized: table    
+        example:      
+            +materialized: view
+    ```
+    
+    dbt_project.yml
+    
+    ```css
+    # aftermodels:  
+        jaffle_shop:    
+            +materialized: table
+    ```
+    
+3.  Save your changes.
+
+
+
+## Build models on top of other models
+
+As a best practice in SQL, you should **separate logic** that cleans up your data from logic that transforms your data. You have already started doing this in the existing query by using common table expressions (CTEs).
+
+Now you can experiment by separating the logic out into separate models and using the  [ref](https://docs.getdbt.com/reference/dbt-jinja-functions/ref)  function to build models on top of other models:
+
+[![The DAG we want for our dbt project](https://docs.getdbt.com/img/dbt-dag.png?v=2 "The DAG we want for our dbt project")](https://docs.getdbt.com/guides/databricks?step=10#)The DAG we want for our dbt project
+
+1.  Create a new SQL file,  `models/stg_customers.sql`, with the SQL from the  `customers`  CTE in our original query.
+    
+2.  Create a second new SQL file,  `models/stg_orders.sql`, with the SQL from the  `orders`  CTE in our original query.
+    
+    **models/stg_customers.sql**
+    
+    ```sql
+    select    id as customer_id,    first_name,    last_name
+    from jaffle_shop_customers
+    ```
+    
+    **models/stg_orders.sql**
+    
+    ```sql
+    select    id as order_id,    user_id as customer_id,    order_date,    			    
+    status
+    from jaffle_shop_orders
+    ```
+    
+**3.  Edit the SQL in your  `models/customers.sql`  file as follows:**
+    
+   **models/customers.sql**
+    
+ ```sql
+   with customers as (
+  select 
+    * 
+  from 
+    {{ ref('stg_customers') }}
+), 
+orders as (
+  select 
+    * 
+  from 
+    {{ ref('stg_orders') }}
+), 
+customer_orders as (
+  select 
+    customer_id, 
+    min(order_date) as first_order_date, 
+    max(order_date) as most_recent_order_date, 
+    count(order_id) as number_of_orders 
+  from 
+    orders 
+  group by 
+    1
+), 
+final as (
+  select 
+    customers.customer_id, 
+    customers.first_name, 
+    customers.last_name, 
+    customer_orders.first_order_date, 
+    customer_orders.most_recent_order_date, 
+    coalesce(
+      customer_orders.number_of_orders, 
+      0
+    ) as number_of_orders 
+  from 
+    customers 
+    left join customer_orders using (customer_id)
+) 
+select 
+  * 
+from 
+  final
+  ```
+
+    
+**4.  Execute  dbt run.**
+    
+   This time, when you performed a  `dbt run`, **separate views/tables** were created for  `stg_customers`,  `stg_orders`  and  `customers`. dbt inferred the order to run these models. Because  `customers`  depends on  `stg_customers`  and  `stg_orders`, dbt builds  `customers`  last. You **do not need** to explicitly define these dependencies.
