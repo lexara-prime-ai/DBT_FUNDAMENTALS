@@ -289,7 +289,7 @@ You can now delete the files that dbt created when you initialized the project:
 
 ## Build models on top of other models
 
-As a best practice in SQL, you should **separate logic** that cleans up your data from logic that transforms your data. You have already started doing this in the existing query by using common table expressions (CTEs).
+As a best practice in SQL, you should **separate logic** that **cleans up** your data from logic that **transforms** your data. You have already started doing this in the existing query by using common table expressions (CTEs).
 
 Now you can experiment by separating the logic out into separate models and using the  [ref](https://docs.getdbt.com/reference/dbt-jinja-functions/ref)  function to build models on top of other models:
 
@@ -367,3 +367,58 @@ from
 **4.  Execute  dbt run.**
     
    This time, when you performed a  `dbt run`, **separate views/tables** were created for  `stg_customers`,  `stg_orders`  and  `customers`. dbt inferred the order to run these models. Because  `customers`  depends on  `stg_customers`  and  `stg_orders`, dbt builds  `customers`  last. You **do not need** to explicitly define these dependencies.
+
+
+
+## Add tests to your models[​](https://docs.getdbt.com/guides/databricks?step=11#add-tests-to-your-models "Direct link to Add tests to your models")
+
+Adding  [tests](https://docs.getdbt.com/docs/build/tests)  to a project helps validate that your models are working correctly.
+
+To add tests to your project:
+
+1.  Create a new YAML file in the  `models`  directory, named  `models/schema.yml`
+    
+2.  Add the following contents to the file:
+    
+    models/schema.yml
+   
+```yml
+version: 2
+
+models:
+  - name: customers
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_customers
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_orders
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+```
+    
+3.  Run  `dbt test`, and confirm that all your **tests passed**.
+    
+
+When you run  `dbt test`, dbt **iterates** through your **YAML files, and constructs a query for each test**. Each query will return the number of records that fail the test. If this number is 0, then the test is successful.
