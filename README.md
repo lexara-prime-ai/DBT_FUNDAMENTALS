@@ -514,3 +514,8 @@ As the  `jaffle_shop`  business gains more customers, and those customers create
 7.  Select  **Save**, then click  **Run now**  to run your job.
 8.  Click the run and watch its progress under "Run history."
 9.  Once the run is complete, click  **View Documentation**  to see the docs for your project.
+
+
+## Access Token Issues
+
+[community solutions](https://community.databricks.com/t5/data-engineering/not-able-to-generate-access-token-for-service-principal-using/m-p/7390#:~:text=The%20error%20message%20you%20are%20seeing%20indicates%20that,request%20that%20they%20enable%20it%20for%20your%20workspace.)
