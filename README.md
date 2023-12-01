@@ -747,10 +747,10 @@ sources:
         loaded_at_field: _etl_loaded_at
         freshness:
           warn_after:
-	          count: 12
-	          period: hour
+              count: 12
+              period: hour
           error_after:
-		      count: 24
-	          period: hour
+              count: 24
+	      period: hour
 ```
 
