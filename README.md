@@ -641,3 +641,28 @@ In working on this project, we established some conventions for naming our model
 -   **Staging**  folder: All staging models and source configurations can be stored here. Further subfolders can be used to separate data by data source (e.g. Stripe, Segment, Salesforce). (We will cover configuring Sources in the Sources module)
 
 ![](https://files.cdn.thinkific.com/file_uploads/342803/images/37a/954/943/models.png)
+
+**Q & A
+Q1. In the dbt context, what is a model?**
+A. A select statement written in SQL
+
+**Q2. What file type is used for building a model?**
+A. .sql
+
+**Q3. What is the default materialization of a model if you don't proactively configure the materialization for a model?**
+A. View
+
+**Q4. A given model called `events` is configured to be materialized as a view in dbt_project.yml and configured as a table in a config block at the top of the model. When you execute dbt run, what will happen in dbt?**
+A. dbt will build the `events` model as a table
+
+**Q5. How do you build dependencies between models?**
+A. Use the 'ref' function in the from clause of a model
+
+**Q6. Which one of the following is true about staging models as defined in this course?**
+A. Staging models are used to perform light touch transformations to shape the data to how you wish it looked
+
+**Q7. Which of the following is a benefit of using subdirectories in your models directory?**
+A. Subdirectories allow you to configure materializations at the folder level for a collection of models
+
+**Q8. Which command below will attempt to only materialize dim_customers and its downstream models?**
+A. dbt run --select dim_customers+
