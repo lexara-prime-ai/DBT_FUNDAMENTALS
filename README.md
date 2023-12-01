@@ -667,3 +667,90 @@ In working on this project, we established some conventions for naming our model
 
 **Q8. Which command below will attempt to only materialize dim_customers and its downstream models?**
 * A. dbt run --select dim_customers+
+
+
+
+# Practice
+
+Using the resources in this module, complete the following in your dbt project.
+
+## Configure sources
+
+-   Configure a source for the tables  `raw.jaffle_shop.customers`  and  `raw.jaffle_shop.orders`  in a file called  `src_jaffle_shop.yml`.
+
+**`models/staging/jaffle_shop/src_jaffle_shop.yml`**
+
+```yaml
+version: 2
+
+sources:
+  - name: jaffle_shop
+    database: raw
+    schema: jaffle_shop
+    tables:
+      - name: customers
+      - name: orders
+
+```
+
+-   Extra credit: Configure a source for the table  `raw.stripe.payment`  in a file called  `src_stripe.yml`.
+
+## Refactor staging models
+
+-   Refactor  `stg_customers.sql`  using the source function.
+
+**`models/staging/jaffle_shop/stg_customers.sql`**
+
+```sql
+select 
+    id as customer_id,
+    first_name,
+    last_name
+from {{ source('jaffle_shop', 'customers') }}
+
+```
+
+-   Refactor  `stg_orders.sql`  using the source function.
+
+**`models/staging/jaffle_shop/stg_orders.sql`**
+
+```sql
+select
+    id as order_id,
+    user_id as customer_id,
+    order_date,
+    status
+from {{ source('jaffle_shop', 'orders') }}
+
+```
+
+-   Extra credit: Refactor  `stg_payments.sql`  using the source function.
+
+## Extra credit
+
+-   Configure your Stripe payments data to check for source freshness.
+-   Run  `dbt source freshness`.
+
+  
+
+You can configure your  `sources.yml`  file as below:
+```yaml
+version: 2
+
+sources:
+  - name: my_table_name
+    database: my_database_name
+    schema: my_schema_name
+    tables:
+      - name: my_table_name
+      - ...
+        loaded_at_field: _etl_loaded_at
+        freshness:
+          warn_after:
+	          count: 12
+	          period: hour
+          error_after:
+		      count: 24
+	          period: hour
+```
+
