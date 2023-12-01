@@ -819,3 +819,77 @@ sources:
 -   A threshold can be configured for giving a warning and an error with the keys  `warn_after`  and  `error_after`.
 -   The freshness of sources can then be determined with the command  `dbt source freshness`.
 
+## Q & A
+**Q. By default, where in your dbt project will dbt look for source configurations?**
+A. A .yml file in the models folder
+
+**Q. Which of the following is NOT a benefit of using the sources feature?**
+A. You can modify and append to raw tables in your data warehouse
+
+**Q. Consider the YAML file below. Which of the following lines of code will select all columns from the products table?**
+
+**models/staging/payments_sources.yml**
+
+```yaml
+version: 2
+
+sources:
+  - name: salesforce
+    database: raw
+    schema: sfdc
+    tables:
+      - name: customers
+      - name: opportunities
+      - name: products
+  - name: quickbooks   
+    database: raw
+    schema: qb
+    tables:
+      - name: payments
+      - name: customers
+```
+A. `select * from {{ source(‘salesforce’, ‘products’) }}`
+
+**Q.** ![](https://files.cdn.thinkific.com/file_uploads/342803/images/cbf/da6/dd7/1651257429677.jpg)
+
+**Consider the DAG of a dbt project listed above. What was most likely missed by the data team working on this project?**
+A. They did not use the source function to build a dependency between staging models and sources
+
+**Q.** ```yml
+```yaml
+version: 2
+
+sources:
+  - name: jaffle_shop
+    description: A clone of a Postgres application database
+    database: raw
+    schema: jaffle_shop
+    tables:
+      - name: customers
+        description: Raw customers data.
+        columns:
+          - name: id
+            description: Primary key for customers data.
+            tests:
+              - unique
+              - not_null
+      - name: orders
+        description: Raw orders data.
+        columns:
+          - name: id
+            description: Primary key for orders data.
+            tests:
+              - unique
+              - not_null
+        loaded_at_field: _etl_loaded_at
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}
+```
+**Consider the YAML above. What does the freshness block accomplish?**
+A. dbt will warn if the max(_etl_loaded_at) > 12 hours old, and error if max(_etl_loaded_at) > 24 hours old in the orders table when checking source freshness.
+
+**Q.** **What is the correct command to test your source freshness, assuming the freshness config block is correct?**
+A. dbt source freshness
+
+
