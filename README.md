@@ -893,10 +893,44 @@ A. dbt will warn if the max(_etl_loaded_at) > 12 hours old, and error if max(_et
 A. dbt source freshness
 
 
-## Testing
 # Learning Objectives
 
 -   Explain why **testing** is crucial for analytics.
 -   Explain the role of testing in analytics engineering.
 -   Configure and run **generic tests** in dbt.
 -   Write, configure, and run **singular tests** in dbt.
+
+## Writing Generic Tests
+#### Reference: Code Snippets
+
+**models/staging/jaffle_shop/stg_jaffle_shop.yml**
+
+_Note how this is a .yml file rather than a .sql file_
+
+```yaml
+version: 2
+
+models:
+  - name: stg_customers
+    columns: 
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_orders
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: status
+        tests:
+          - accepted_values:
+              values:
+                - completed
+                - shipped
+                - returned
+                - return_pending
+                - placed
+```
