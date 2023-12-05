@@ -1172,3 +1172,66 @@ A. select * from {{ ref( ‘cool_model’) }} where Column A < Column B
 **Q. What is most likely true if a generic test on your sources fails?**
 A. An assumption about your raw data is no longer true
 
+
+# DBT Project Documentation
+#### Reference: Code Snippets
+
+**models/staging/jaffle_shop/stg_jaffle_shop.yml**
+
+```yaml
+version: 2
+
+models:
+  - name: stg_customers
+    description: Staged customer data from our jaffle shop app.
+    columns: 
+      - name: customer_id
+        description: The primary key for customers.
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_orders
+    description: Staged order data from our jaffle shop app.
+    columns: 
+      - name: order_id
+        description: Primary key for orders.
+        tests:
+          - unique
+          - not_null
+      - name: status
+        description: '{{ doc("order_status") }}'
+        tests:
+          - accepted_values:
+              values:
+                - completed
+                - shipped
+                - returned
+                - placed
+                - return_pending
+      - name: customer_id
+        description: Foreign key to stg_customers.customer_id.
+        tests:
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+
+```
+# Documenting using doc blocks
+****models/staging/jaffle_shop/**jaffle_shop.md**
+
+```
+{% docs order_status %}
+	
+One of the following values: 
+
+| status         | definition                                       |
+|----------------|--------------------------------------------------|
+| placed         | Order placed, not yet shipped                    |
+| shipped        | Order has been shipped, not yet been delivered   |
+| completed      | Order has been received by customers             |
+| return pending | Customer indicated they want to return this item |
+| returned       | Item has been returned                           |
+
+{% enddocs %}
+```
