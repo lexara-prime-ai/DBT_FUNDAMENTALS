@@ -1218,7 +1218,7 @@ models:
 
 ```
 # Documenting using doc blocks
-****models/staging/jaffle_shop/**jaffle_shop.md**
+**models/staging/jaffle_shop/**jaffle_shop.md**
 
 ```
 {% docs order_status %}
