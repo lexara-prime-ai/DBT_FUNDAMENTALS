@@ -1453,3 +1453,35 @@ A.
   
 
 Curious to know more about deploying with dbt Cloud? Check out our free online  [Advanced Deployment course](https://courses.getdbt.com/courses/advanced-deployment), where you'll learn how to deploy your dbt Cloud project with advanced functionality including continuous integration, orchestrating conflicting jobs, and customizing behavior by environment!
+
+
+## Q & A
+**Q. Which one of the following are true about running your dbt project in production?**
+A. Running dbt in production should use a different database schema than I used in development
+
+**Q. When does a dbt job run?**
+A. At whatever cadence you set up for the job
+
+**Q. The following commands are configured for a production job in dbt Cloud.**
+`dbt seed`
+`dbt test --select source`
+`dbt run`
+`dbt test --exclude source`
+
+**If any of the tests on sources fails, how will dbt Cloud handle the rest of the commands?**
+
+A. dbt will not execute any further commands
+
+**Q. Consider a production job where you have the following commands and have enabled docs generation.**
+`dbt run`
+`dbt test`
+
+**What will be the correct order of invoked dbt commands in the run history after ‘clone git repository’ and ‘create profile from connection’?**
+
+A. `dbt deps >> dbt run >> dbt test >> dbt docs generate`
+
+**Q.  Which one of the following is true about development and deployment environments?**
+A. Deployment environments are used for running code on a schedule and development environments are used for developing code.
+
+**Q. After developing models in dbt, which one of the following steps is the final step to ensure your code runs in production?**
+A. The code has been reviewed and merged into the default branch
