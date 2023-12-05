@@ -934,3 +934,34 @@ models:
                 - return_pending
                 - placed
 ```
+
+# Singular Tests
+## Q & A 
+Q. Will this work?
+```sql
+select 
+    order_id, 
+    sum(amount) as total_amount
+from payments
+-- Group by 1st column
+group by 1
+having total_amount < 0
+```
+
+A. We're using the table alias "payments" in our query, but we are encountering an error related to the column `"total_amount" not existing`. 
+The issue here is that we're using the alias "total_amount" in the HAVING clause, but it's not recognized because it's an alias for the result of the SUM(amount) expression, 
+and aliases defined in the SELECT clause **cannot** be used in the HAVING clause.
+
+* Correct solution
+  ```sql
+  with payments as (
+    select * from "organizations"."dbt_dev_on_render"."stg_payments"
+)
+
+select 
+    order_id, 
+    sum(amount) as total_amount
+from payments
+group by 1
+having sum(amount) < 0;
+```
