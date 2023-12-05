@@ -1390,3 +1390,32 @@ One of the following values:
     -   Generic tests added to a column
     -   The underlying SQL code for each model
     -   and more...
+
+
+
+
+## Q & A
+**Q. What command will generate documentation for your project in development?**
+A. dbt docs generate
+
+**Q. Which one of the following statements is true about documentation in dbt?**
+A. dbt will automatically pull descriptions from your dbt project and metadata about your models and sources into the documentation site
+
+**Q. What is the correct way to reference the doc block called ‘orders’, contained in a file called docs_jaffle_shop.md?**
+A. description: ‘{{ doc(“orders”) }}’
+
+**Q. What aspects of the generated DAG can help you understand your data flow?**
+A.
+ - Dependencies between models can help identify how code is used and possible redundancies
+
+- The selector can help narrow the scope of the shown DAG, which allows you to see how your specific model is used upstream and/or downstream
+
+
+# Deployment
+
+# Learning Objectives
+
+-   Understand why it's necessary to deploy your project.
+-   Explain the purpose of creating a deployment environment.
+-   Schedule a job in dbt Cloud.
+-   Review the results and artifacts of a scheduled job in dbt Cloud.
