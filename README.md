@@ -952,6 +952,14 @@ A. We're using the table alias "payments" in our query, but we are encountering 
 The issue here is that we're using the alias "total_amount" in the HAVING clause, but it's not recognized because it's an alias for the result of the SUM(amount) expression, 
 and aliases defined in the SELECT clause **cannot** be used in the HAVING clause.
 
+## Writing Singular Tests
+tests/assert_positive_total_for_payments.sql
+
+Note how this is a .sql file in the tests directory
+
+-- Refunds have a negative amount, so the total amount should always be >= 0.
+-- Therefore return records where this isn't true to make the test fail.
+
 * Correct solution
   ```sql
   with payments as (
@@ -965,3 +973,31 @@ from payments
 group by 1
 having sum(amount) < 0;
 ```
+
+# Testing Sources
+models/staging/jaffle_shop/src_jaffle_shop.yml
+
+version: 2
+
+sources:
+  - name: jaffle_shop
+    database: raw
+    schema: jaffle_shop
+    tables:
+      - name: customers
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+            
+      - name: orders
+        columns:
+          - name: id
+            tests:
+              - unique              
+              - not_null
+        loaded_at_field: _etl_loaded_at
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}
