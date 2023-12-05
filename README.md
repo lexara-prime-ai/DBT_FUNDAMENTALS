@@ -1064,3 +1064,14 @@ having not(total_amount >= 0)
 * Add a relationships test to your stg_orders model for the customer_id in stg_customers.
 * Add tests throughout the rest of your models.
 * Write your own singular tests.
+
+
+
+## Testing Referencial Integrity
+```yaml
+- name: customer_id
+        tests:
+          - relationships:
+              field: id
+              to: ref('customers')
+```
