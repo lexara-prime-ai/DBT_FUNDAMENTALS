@@ -1115,3 +1115,60 @@ In production, dbt Cloud can be scheduled to run  `dbt test`. The ‘Run History
 You've learned about the 4 built-in generic tests, but there are so many more tests in packages you could be using! Learn about them in our free online course on  [Jinja, Macros, and Packages.](https://courses.getdbt.com/courses/jinja-macros-packages)
 
 Do you want to take your testing knowledge to the next level? Check out our free online course on  [Advanced Testing](https://courses.getdbt.com/courses/advanced-testing)!
+
+# Q & A
+**Q. What file type is used for specifying which generic tests to run by model and column?**
+A. .sql
+
+**Q. What are the four generic tests that dbt ships with?**
+A. Not_null, unique, relationships, accepted_values
+
+**Q. In what folder should singular tests be saved in your dbt project?**
+A. tests
+
+**Q. What command would you use to only run tests configured on a source named my_raw_data?**
+A. dbt test --select source:my_raw_data
+
+**Q. Based on the YAML file below, which one of the following statements is true?**
+
+`**models/staging/payments_sources.yml**`
+
+```yaml
+version: 2
+
+models:
+  - name: customers
+    columns: 
+      - name: customer_id
+        tests:
+          - not_null
+  - name: payments
+    columns: 
+      - name: payment_id
+        tests:
+          - unique
+          - not_null
+      - name: payment_method
+        tests:
+          - accepted_values:
+              values: 
+                - credit_card
+                - ach_transfer
+                - paypal
+  - name: orders
+    columns: 
+      - name: order_id
+        tests:
+          - unique
+```
+A. The accepted values test will fail if one of the values in the payment_method column is not equal to credit_card, paypal, or ach_transfer
+
+**Q. How do you associate a singular test with a particular dbt model or source?**
+A. Using the ref or source macro in the SQL query in the singular test file
+
+**Q. What query would you use to create a singular test to assert that no record in cool_model has a value in Column A that is less than the value in Column B?**
+A. select * from {{ ref( ‘cool_model’) }} where Column A < Column B
+
+**Q. What is most likely true if a generic test on your sources fails?**
+A. An assumption about your raw data is no longer true
+
