@@ -1235,3 +1235,41 @@ One of the following values:
 
 {% enddocs %}
 ```
+
+
+## Documenting Source Models
+#### Reference: Code Snippets
+
+**models/staging/jaffle_shop/src_jaffle_shop.yml**
+
+```yaml
+version: 2
+
+sources:
+  - name: jaffle_shop
+    description: A clone of a Postgres application database.
+    database: raw
+    schema: jaffle_shop
+    tables:
+      - name: customers
+        description: Raw customers data.
+        columns:
+          - name: id
+            description: Primary key for customers.
+            tests:
+              - unique
+              - not_null
+
+      - name: orders
+        description: Raw orders data.
+        columns:
+          - name: id
+            description: Primary key for orders.
+            tests:
+              - unique
+              - not_null
+        loaded_at_field: _etl_loaded_at
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}
+```
